@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+</head>
+<style>
+	body {
+		font-family: 'Roboto Condensed', sans-serif;
+	}
+</style>
+<div class="modal-header">
+    <h5 class="modal-title">Case detail</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+<body>
+	<div  class="modal-body">
+		<div id = "detail" >
+		<ul class ="list-group mb-5">
+			<li class = "list-group-item">
+			Case ID: {{ incident.id }} 
+			</li>
+			<br>
+			<li class = "list-group-item">
+			Type of assistance required: {{ incident.get_incident_type_display }}
+			</li>
+			<br>
+			<li class = "list-group-item">
+			Level of Severity: {{ incident.severity }}
+			</li>
+			<br>
+			<li class = "list-group-item">
+			Reported date: {{ incident.incident_date|date:"d M Y" }}
+			</li>
+			<br>
+			<li class = "list-group-item">
+			Reported time: {{ incident.incident_date|date:"H:i:s" }}
+			</li>
+			<br>
+			<li class = "list-group-item">
+			Address: {{ incident.location }}
+			</li>
+			<br>
+			<li class = "list-group-item">
+			Name of Caller: {{ incident.caller }}
+			</li>
+			<br>
+			<li class = "list-group-item">
+			Submitted by: {{ incident.submitter.username }}
+			</li>
+			<div class="modal-footer">
+		</ul>
+		{% if user.is_staff %}
+		{% if incident.is_closed == False %}
+		<div  id = "button" class="btn-toolbar">
+		<form method= "post" >
+			{% csrf_token %}
+			<div class = "btn-group mr-2">
+				<button type="submit" class ="btn btn-primary" onclick= "return confirm('Are you sure?');" >Close case</button>
+			</div>
+		</form>
+				<div class = "btn-group mr-2">
+					<a href="{% url 'cms:send_message' incident.pk %}" class = "btn btn-success" role="button" >Send to Public</a>
+				</div>
+		{% endif %}		
+		{% endif %}
+			<div class = "btn-group mr-2">
+			<a href="{% url 'cms:home' %}" class = "btn btn-secondary" role="button" >Go Back</a>
+			</div>
+		</div>
+	</div>
+	</div>		
+
+</body>
+</html>
